@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Objekt Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            margin: 1rem;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .karte {
+            display: inline-block;
+            width: 200px;
+            height: 300px;
+            margin-top: 2rem;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 1.5rem;
+            line-height: 300px;
+            transition: transform 0.3s;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .karte:hover {
+            transform: rotateY(180deg);
+            background-color: #f9c74f;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Random Objekt Generator</h1>
+    <button onclick="zeigeObjekt()">Neues Objekt</button>
+    <div id="container"></div>
+
+    <script>
+        // Array mit "Objekten" (hier JS-Objekte)
+        const objekte = [
+            { name: "Roter Würfel", wert: 6, farbe: "#ff4c4c" },
+            { name: "Blaue Karte", wert: 3, farbe: "#4c6cff" },
+            { name: "Grüne Münze", wert: 1, farbe: "#4cff72" },
+            { name: "Gelbes Bonbon", wert: 2, farbe: "#f9c74f" },
+            { name: "Lila Kristall", wert: 5, farbe: "#a64cff" }
+        ];
+
+        function zeigeObjekt() {
+            const randomIndex = Math.floor(Math.random() * objekte.length);
+            const obj = objekte[randomIndex];
+
+            const container = document.getElementById("container");
+            container.innerHTML = ""; // vorheriges Objekt entfernen
+
+            // Neues "Objekt"-Div erstellen
+            const div = document.createElement("div");
+            div.className = "karte";
+            div.style.backgroundColor = obj.farbe;
+            div.textContent = obj.name;
+
+            // Klick-Ereignis auf das Objekt
+            div.onclick = () => {
+                alert(`Du hast ${obj.name} mit Wert ${obj.wert} gewählt!`);
+            };
+
+            container.appendChild(div);
+        }
+    </script>
+</body>
+
+</html>
