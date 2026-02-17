@@ -1,8 +1,8 @@
 const objekte = [
     {
         img: "ressources/klattschen.png",
-        name: "Klattschen 2.0",
-        description: "Mini-Games Erweiterung"
+        name: "Mannschafts-Klattschen",
+        description: "Mini-Games 2.0"
     },
     {
         img: "ressources/luftmalerei.png",
@@ -54,12 +54,12 @@ const objekte = [
         img: "ressources/jinx.png",
         name: "Verhexxt",
         description:
-            "Du und deine linke Mitspielerin sagen gleichzeitig <b>spontan irgendein</b> Wort. " +
+            "Du und deine linke Mitspielerin sagt gleichzeitig <b>spontan irgendein</b> Wort. " +
             "<b>Ziel</b> ist, das <b>gleiche</b> Wort zu sagen. Schafft ihr es direkt: prima! Ihr dürft jeweils 1 Klattscher <b>verteilen</b>. " +
             "Schafft ihr es nicht, spielt deine linke Mitspielerin mit ihrer linken Mitspielerin erneut. " +
             "Nutzt dafür die beiden <b>vorher genannten</b> Worte, um dadurch zum gleichen Wort zu gelangen.<br>" +
             "Beispiel: Die ersten Wörter sind 'Apfel' und 'Birne'. Die nächsten Spielerinnen kommen dann gemeinsam zu dem Wort 'Obst'.<br><br>" +
-            "Ihr habt eine Runde Zeit, um auf ein gemeinsames Wort zu kommen. Schafft ihr es nicht klattschen <b>alle</b>."
+            "Ihr habt eine Runde Zeit, um auf ein gleiches Wort zu kommen. Schafft ihr es nicht klattschen <b>alle</b>."
     },
     {
         img: "ressources/countNdSound.png",
@@ -70,12 +70,10 @@ const objekte = [
             "Wer zuerst einen <b>Fehler</b> macht klattscht."
     },
     {
-        img: "ressources/countNdSound.png",
-        name: "Zählen oder so",
+        img: "",
+        name: "TEST",
         description:
-            "Ihr <b>zählt</b> gemeinsam bis 10, wobei Zahlen durch andere Wörter/Zahlen/Sounds <b>ersetzt</b> werden. Du beginnst mit einer Ersetzung (sagt statt 3 -> blau). Danach wird linksum hoch gezählt.<br>" +
-            "Seid ihr bei 10 angekommen, ersetzt diejenige, die an der Reihe ist erneut eine Zahl. Dies kann die <b>gleiche</b> oder eine <b>andere</b> Zahl betreffen.<br><br>" +
-            "Wer zuerst einen <b>Fehler</b> macht klattscht."
+            "TEST"
     }
 ];
 
