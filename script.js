@@ -5,7 +5,7 @@ const objekte = [
         description: "Mini-Games Erweiterung"
     },
     {
-        img: "https://img.icons8.com/?id=58856",
+        img: "ressources/luftmalerei.png",
         name: "Luftbilder",
         description:
             "Zeichne etwas mit deinem Finger in die Luft.<br>" +
@@ -39,6 +39,44 @@ const objekte = [
             "Wenn eine Zahl <b>gleichzeitig mehrfach</b> gesagt wird, klattschen diese Mitspieler und das Spiel ist vorbei.<br>" +
             "Habt ihr es geschafft fertig zu zählen, klattschen alle, die noch <b>keine Zahl</b> genannt haben."
     },
+    {
+        img: "ressources/wouldYouRather.png",
+        name: " Entweder-Oder irre ich mich?",
+        description:
+            "Du stellst einer beliebigen Mitspielerin eine <b>Entweder-Oder</b>-Frage (z. B. Pizza oder Burger).<br>" +
+            "Alle antworten <b>gleichzeitig</b>!<br>" +
+            "Die befragte Mitspielerin beantwortet die Frage dabei nach eigenem Gusto. " +
+            "Alle anderen Mitspielerinnen (auch du) versuchen im Sinne der befragten Mitspielerin zu antworten.<br>" +
+            "Zeigt wie gut ihr euch kennt!<br><br>" +
+            "Alle mit <b>anderer Antwort</b> als die der Befragten klattschen!"
+    },
+    {
+        img: "ressources/jinx.png",
+        name: "Verhexxt",
+        description:
+            "Du und deine linke Mitspielerin sagen gleichzeitig <b>spontan irgendein</b> Wort. " +
+            "<b>Ziel</b> ist, das <b>gleiche</b> Wort zu sagen. Schafft ihr es direkt: prima! Ihr dürft jeweils 1 Klattscher <b>verteilen</b>. " +
+            "Schafft ihr es nicht, spielt deine linke Mitspielerin mit ihrer linken Mitspielerin erneut. " +
+            "Nutzt dafür die beiden <b>vorher genannten</b> Worte, um dadurch zum gleichen Wort zu gelangen.<br>" +
+            "Beispiel: Die ersten Wörter sind 'Apfel' und 'Birne'. Die nächsten Spielerinnen kommen dann gemeinsam zu dem Wort 'Obst'.<br><br>" +
+            "Ihr habt eine Runde Zeit, um auf ein gemeinsames Wort zu kommen. Schafft ihr es nicht klattschen <b>alle</b>."
+    },
+    {
+        img: "ressources/countNdSound.png",
+        name: "Zählen oder so",
+        description:
+            "Ihr <b>zählt</b> gemeinsam bis 10, wobei Zahlen durch andere Wörter/Zahlen/Sounds <b>ersetzt</b> werden. Du beginnst mit einer Ersetzung (sagt statt 3 -> blau). Danach wird linksum hoch gezählt.<br>" +
+            "Seid ihr bei 10 angekommen, ersetzt diejenige, die an der Reihe ist erneut eine Zahl. Dies kann die <b>gleiche</b> oder eine <b>andere</b> Zahl betreffen.<br><br>" +
+            "Wer zuerst einen <b>Fehler</b> macht klattscht."
+    },
+    {
+        img: "ressources/countNdSound.png",
+        name: "Zählen oder so",
+        description:
+            "Ihr <b>zählt</b> gemeinsam bis 10, wobei Zahlen durch andere Wörter/Zahlen/Sounds <b>ersetzt</b> werden. Du beginnst mit einer Ersetzung (sagt statt 3 -> blau). Danach wird linksum hoch gezählt.<br>" +
+            "Seid ihr bei 10 angekommen, ersetzt diejenige, die an der Reihe ist erneut eine Zahl. Dies kann die <b>gleiche</b> oder eine <b>andere</b> Zahl betreffen.<br><br>" +
+            "Wer zuerst einen <b>Fehler</b> macht klattscht."
+    }
 ];
 
 let lastGameIndex = 0;
