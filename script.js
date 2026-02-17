@@ -6,11 +6,11 @@ const objekte = [
     },
     {
         img: "https://img.icons8.com/?id=58856",
-        name: "Imaginäres (Haus)tier",
+        name: "Luftbilder",
         description:
-            "Zeichne ein <b>Tier</b> in die Luft.<br>" +
-            "Du hast <b>3 Versuche</b>.<br><br>" +
-            "Wird dein Tier erraten, klattschen <b>alle ohne</b> richtige Antwort.<br>" +
+            "Zeichne etwas mit deinem Finger in die Luft.<br>" +
+            "Du hast <b>2 Versuche</b>.<br><br>" +
+            "Wird dein Bild erraten, klattschen <b>alle ohne</b> richtige Antwort.<br>" +
             "Errät es <b>niemand</b>, musst du klattschen."
     },
     {
@@ -22,7 +22,7 @@ const objekte = [
             "Wer <b>kein</b> Wort mehr findet oder ein <b>falsches</b> sagt, muss klattschen."
     },
     {
-        img: "https://picsum.photos/400/300?random=2",
+        img: "ressources/wordChain.png",
         name: "Wortkette",
         description:
             "Du beginnst mit einem <b>zusammengesetzten Wort</b> – z. B. Boxsack. " +
