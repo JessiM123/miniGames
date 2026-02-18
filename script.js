@@ -191,7 +191,7 @@ class TimeStopper extends Game {
         };
 
         // Multitouch-fähig auf Mobilgeräten
-        side.addEventListener("touchstart", handleTouch, { passive: false });
+        side.addEventListener("pointerdown", handleTouch, { passive: false });
 
         // Fallback für Desktop
         side.addEventListener("click", handleTouch);
