@@ -198,8 +198,8 @@ class TimeStopper extends Game {
             const diff1 = Math.abs(this.stopTimePlayer1 - this.stopTimeGoal);
             const diff2 = Math.abs(this.stopTimePlayer2 - this.stopTimeGoal);
 
-            document.getElementById("upperTime").textContent = diff1 > diff2 ? "Klattschen" : "Fertig";
-            document.getElementById("downerTime").textContent = diff2 > diff1 ? "Klattschen" : "Fertig";
+            document.getElementById("upperTime").textContent = diff1 > diff2 ? "Klattschen" : "";
+            document.getElementById("downerTime").textContent = diff2 > diff1 ? "Klattschen" : "";
 
             document.getElementById("upperNotice").textContent = `${this.stopTimePlayer1.toFixed(2)} s`;
             document.getElementById("downerNotice").textContent = `${this.stopTimePlayer2.toFixed(2)} s`;
