@@ -169,19 +169,19 @@ class TimeStopper extends Game {
         const side = document.getElementById(`${playerId}Side`);
         const text = document.getElementById(`${playerId}Time`);
 
-        side.onclick = () => {
-            const runningKey = `${playerId}Running`;
-            const startKey = `${playerId}Start`;
-            const stopKey = `stopTime${playerId === "upper" ? "Player1" : "Player2"}`;
+        const runningKey = `${playerId}Running`;
+        const startKey = `${playerId}Start`;
+        const stopKey = `stopTime${playerId === "upper" ? "Player1" : "Player2"}`;
 
-            // START
+        const handleTouch = (e) => {
+            e.preventDefault(); // verhindert Scroll / Zoom
             if (!this[runningKey] && this[stopKey] === 0) {
+                // START
                 this[startKey] = performance.now();
                 this[runningKey] = true;
                 text.textContent = "";
-            }
-            // STOP
-            else if (this[runningKey]) {
+            } else if (this[runningKey]) {
+                // STOP
                 this[runningKey] = false;
                 this[stopKey] = (performance.now() - this[startKey]) / 1000;
                 text.textContent = "Fertig";
@@ -189,6 +189,12 @@ class TimeStopper extends Game {
                 this.checkGameover();
             }
         };
+
+        // Multitouch-fähig auf Mobilgeräten
+        side.addEventListener("touchstart", handleTouch, { passive: false });
+
+        // Fallback für Desktop
+        side.addEventListener("click", handleTouch);
     }
 
     checkGameover() {
