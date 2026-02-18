@@ -220,11 +220,11 @@ class TimeStopper extends Game {
 
 const currentGame = new Game("Mannschafts-Klattschen", "ressources/klattschen.png", "Mini-Games 2.0")
 const games = [
-    new WordRoulette(),
+    /*new WordRoulette(),
     new CountAndSound(),
     new Luftmalerei(),
     new WordChain(),
-    new CounterStrike(),
+    new CounterStrike(),*/
     new WouldYouRather(),
     new TimeStopper()
 ]
