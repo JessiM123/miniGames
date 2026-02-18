@@ -22,6 +22,8 @@ class Game {
     }
 }
 class WordRoulette extends Game {
+    minWordLength = Math.ceil(3)
+    maxWordLength = Math.floor(6)
     constructor() {
         super("Buchstaben-Roulette",
             "ressources/wordRoulette.png",
@@ -31,8 +33,9 @@ class WordRoulette extends Game {
 
     start() {
         const randomLetter = _randomBuchstabe()
+        const randomNumber = Math.floor(Math.random() * (this.maxWordLength - this.minWordLength + 1) + this.minWordLength)
         this.description =
-            `Finde ein <b>5-Buchstaben-Wort</b>, das mit <b>${randomLetter}</b> beginnt!<br>` +
+            `Finde ein <b>${randomNumber}-Buchstaben-Wort</b>, das mit <b>${randomLetter}</b> beginnt!<br>` +
             "Du fängst an, danach geht es reihum weiter.<br><br>" +
             "Wer <b>kein</b> Wort mehr findet oder ein <b>falsches</b> sagt, muss klattschen."
         this._render()
@@ -99,6 +102,115 @@ class WouldYouRather extends Game {
         )
     }
 }
+class TimeStopper extends Game {
+    maxSeconds = 20
+    minSeconds = 1
+    stopTimeGoal = 0
+
+
+    player1Start = null;
+    player2Start = null;
+
+    player1Running = false;
+    player2Running = false;
+
+    stopTimePlayer1 = 0;
+    stopTimePlayer2 = 0;
+    constructor() {
+        super(
+            "Schneller als die Zeit erlaubt",
+            "",
+            ""
+        )
+    }
+    reset() {
+        this.player1Start = null;
+        this.player2Start = null
+        this.player1Running = false;
+        this.player2Running = false;
+        this.stopTimePlayer1 = 0;
+        this.stopTimePlayer2 = 0;
+
+        this.updatePlayerUI("upper", "Start", "");
+        this.updatePlayerUI("downer", "Start", "");
+    }
+
+    start() {
+        this.reset()
+        this.stopTimeGoal = (Math.random() * (this.maxSeconds - this.minSeconds + 1) + this.minSeconds).toFixed(2)
+        this.description = `Suche dir eine Gegnerin aus.<br>Euer Ziel ist es, den Button bei <b>${this.stopTimeGoal}</b> Sekunden zu stoppen!<br>` +
+            `Dabei seht ihr nicht, wie lange die Zeit bereits läuft. Wer weiter von der Zielzeit weg ist, klattscht!<br><br>` +
+            `Klickt auf die Spielbeschreibung, um zum Spielfeld zu kommen.`
+        this._render()
+        document.getElementById("card").onclick = () => {
+            this.openOverlay()
+        };
+        document.getElementById("timeStopGoal").onclick = () => {
+            this.closeOverlay()
+        };
+    }
+    openOverlay() {
+        const overlay = document.getElementById("timeOverlay");
+        overlay.classList.remove("hidden");
+        document.getElementById("timeStopGoal").textContent = `${this.stopTimeGoal} Sekunden`;
+        this.initPlayerLogic();
+    }
+
+    closeOverlay() {
+        document.getElementById("timeOverlay").classList.add("hidden");
+    }
+
+    initPlayerLogic() {
+        this.setupPlayer("upper");
+        this.setupPlayer("downer");
+    }
+
+    setupPlayer(playerId) {
+        const side = document.getElementById(`${playerId}Side`);
+        const text = document.getElementById(`${playerId}Time`);
+
+        side.onclick = () => {
+            const runningKey = `${playerId}Running`;
+            const startKey = `${playerId}Start`;
+            const stopKey = `stopTime${playerId === "upper" ? "Player1" : "Player2"}`;
+
+            // START
+            if (!this[runningKey] && this[stopKey] === 0) {
+                this[startKey] = performance.now();
+                this[runningKey] = true;
+                text.textContent = "";
+            }
+            // STOP
+            else if (this[runningKey]) {
+                this[runningKey] = false;
+                this[stopKey] = (performance.now() - this[startKey]) / 1000;
+                text.textContent = "Fertig";
+                console.log(`${playerId} Zeit:`, this[stopKey].toFixed(3));
+                this.checkGameover();
+            }
+        };
+    }
+
+    checkGameover() {
+        if (!this.player1Running && !this.player2Running &&
+            this.stopTimePlayer1 > 0 && this.stopTimePlayer2 > 0) {
+
+            const diff1 = Math.abs(this.stopTimePlayer1 - this.stopTimeGoal);
+            const diff2 = Math.abs(this.stopTimePlayer2 - this.stopTimeGoal);
+
+            document.getElementById("upperTime").textContent = diff1 > diff2 ? "Klattschen" : "Fertig";
+            document.getElementById("downerTime").textContent = diff2 > diff1 ? "Klattschen" : "Fertig";
+
+            document.getElementById("upperNotice").textContent = `${this.stopTimePlayer1.toFixed(2)} s`;
+            document.getElementById("downerNotice").textContent = `${this.stopTimePlayer2.toFixed(2)} s`;
+        }
+    }
+
+    updatePlayerUI(playerId, mainText, noticeText) {
+        document.getElementById(`${playerId}Time`).textContent = mainText;
+        document.getElementById(`${playerId}Notice`).textContent = noticeText;
+    }
+}
 
 const currentGame = new Game("Mannschafts-Klattschen", "ressources/klattschen.png", "Mini-Games 2.0")
 const games = [
@@ -107,7 +219,8 @@ const games = [
     new Luftmalerei(),
     new WordChain(),
     new CounterStrike(),
-    new WouldYouRather()
+    new WouldYouRather(),
+    new TimeStopper()
 ]
 let lastGameIndex = -1;
 function newGame() {

@@ -82,6 +82,54 @@ body {
     background-color: #45a049;
 }
 
+/* Stop Timer */
+.overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 9999;
+}
+
+.hidden {
+    display: none;
+}
+
+.overlay-half {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: white;
+    user-select: none;
+}
+
+.upper {
+    background: #000000;
+}
+
+.downer {
+    background: #e9091c;
+}
+
+.time {
+    font-size: 4rem;
+}
+
+.notice {
+    font-size: 2rem;
+}
+
+.timeStopGoal {
+    display: flex;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+
 /* Responsive Anpassungen */
 @media (max-width: 500px) {
     .card .cardDescription {
