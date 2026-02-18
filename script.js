@@ -106,125 +106,92 @@ class TimeStopper extends Game {
     maxSeconds = 20
     minSeconds = 1
     stopTimeGoal = 0
-
-
     player1Start = null;
     player2Start = null;
-
     player1Running = false;
     player2Running = false;
-
     stopTimePlayer1 = 0;
     stopTimePlayer2 = 0;
-    constructor() {
-        super(
-            "Schneller als die Zeit erlaubt",
-            "",
-            ""
-        )
-    }
+    constructor() { super("Schneller als die Zeit erlaubt", "", "") }
     reset() {
         this.player1Start = null;
-        this.player2Start = null
+        this.player2Start = null;
         this.player1Running = false;
         this.player2Running = false;
         this.stopTimePlayer1 = 0;
         this.stopTimePlayer2 = 0;
-
-        this.updatePlayerUI("upper", "Start", "");
-        this.updatePlayerUI("downer", "Start", "");
+        document.getElementById("upperTime").textContent = "Start"; document.getElementById("downerTime").textContent = "Start";
+        document.getElementById("upperNotice").textContent = ""; document.getElementById("downerNotice").textContent = "";
     }
-
     start() {
         this.reset()
         this.stopTimeGoal = (Math.random() * (this.maxSeconds - this.minSeconds + 1) + this.minSeconds).toFixed(2)
-        this.description = `Suche dir eine Gegnerin aus.<br>Euer Ziel ist es, den Button bei <b>${this.stopTimeGoal}</b> Sekunden zu stoppen!<br>` +
-            `Dabei seht ihr nicht, wie lange die Zeit bereits läuft. Wer weiter von der Zielzeit weg ist, klattscht!<br><br>` +
+        this.description = `Suche dir eine Gegnerin aus.<br> Euer Ziel ist es, den Button bei <b>${this.stopTimeGoal}</b> Sekunden zu stoppen! <br>` +
+            `Dabei seht ihr nicht, wie lange die Zeit bereits läuft.Wer weiter von der Zielzeit weg ist, klattscht! <br> <br>` +
             `Klickt auf die Spielbeschreibung, um zum Spielfeld zu kommen.`
         this._render()
-        document.getElementById("card").onclick = () => {
-            this.openOverlay()
-        };
-        document.getElementById("timeStopGoal").onclick = () => {
-            this.closeOverlay()
-        };
+        document.getElementById("card").onclick = () => { this.openOverlay() };
+        document.getElementById("timeStopGoal").onclick = () => { this.closeOverlay() };
     }
     openOverlay() {
-        const overlay = document.getElementById("timeOverlay");
-        overlay.classList.remove("hidden");
+        const overlay = document.getElementById("timeOverlay"); overlay.classList.remove("hidden");
         document.getElementById("timeStopGoal").textContent = `${this.stopTimeGoal} Sekunden`;
         this.initPlayerLogic();
     }
-
     closeOverlay() {
-        document.getElementById("timeOverlay").classList.add("hidden");
+        const overlay = document.getElementById("timeOverlay");
+        overlay.classList.add("hidden"); // Overlay ausblenden 
     }
-
     initPlayerLogic() {
-        this.setupPlayer("upper");
-        this.setupPlayer("downer");
-    }
-
-    setupPlayer(playerId) {
-        const side = document.getElementById(`${playerId}Side`);
-        const text = document.getElementById(`${playerId}Time`);
-
-        const runningKey = `${playerId}Running`;
-        const startKey = `${playerId}Start`;
-        const stopKey = `stopTime${playerId === "upper" ? "Player1" : "Player2"}`;
-
-        const handleTouch = (e) => {
-            e.preventDefault(); // verhindert Scroll / Zoom
-            if (!this[runningKey] && this[stopKey] === 0) {
-                // START
-                this[startKey] = performance.now();
-                this[runningKey] = true;
-                text.textContent = "";
-            } else if (this[runningKey]) {
-                // STOP
-                this[runningKey] = false;
-                this[stopKey] = (performance.now() - this[startKey]) / 1000;
-                text.textContent = "Fertig";
-                console.log(`${playerId} Zeit:`, this[stopKey].toFixed(3));
-                this.checkGameover();
+        const upper = document.getElementById("upperSide");
+        const downer = document.getElementById("downerSide");
+        const upperText = document.getElementById("upperTime");
+        const downerText = document.getElementById("downerTime");
+        upper.ontouchstart = () => {
+            if (!this.player1Running && this.stopTimePlayer1 === 0) {
+                this.player1Start = performance.now();
+                this.player1Running = true; upperText.textContent = "";
+            }
+            else if (this.player1Running) {
+                this.player1Running = false;
+                this.stopTimePlayer1 = (performance.now() - this.player1Start) / 1000;
+                upperText.textContent = "Fertig"; console.log("Player 1:",
+                    this.stopTimePlayer1.toFixed(3)); this.checkGameover()
             }
         };
-
-        // Multitouch-fähig auf Mobilgeräten
-        side.addEventListener("pointerdown", handleTouch, { passive: false });
-
-        // Fallback für Desktop
-        side.addEventListener("click", handleTouch);
-    }
-
-    checkGameover() {
-        if (!this.player1Running && !this.player2Running &&
-            this.stopTimePlayer1 > 0 && this.stopTimePlayer2 > 0) {
-
-            const diff1 = Math.abs(this.stopTimePlayer1 - this.stopTimeGoal);
-            const diff2 = Math.abs(this.stopTimePlayer2 - this.stopTimeGoal);
-
-            document.getElementById("upperTime").textContent = diff1 > diff2 ? "Klattschen" : "";
-            document.getElementById("downerTime").textContent = diff2 > diff1 ? "Klattschen" : "";
-
-            document.getElementById("upperNotice").textContent = `${this.stopTimePlayer1.toFixed(2)} s`;
-            document.getElementById("downerNotice").textContent = `${this.stopTimePlayer2.toFixed(2)} s`;
+        downer.ontouchstart = () => {
+            if (!this.player2Running && this.stopTimePlayer2 === 0) {
+                this.player2Start = performance.now();
+                this.player2Running = true; downerText.textContent = "";
+            }
+            else if (this.player2Running) {
+                this.player2Running = false;
+                this.stopTimePlayer2 = (performance.now() - this.player2Start) / 1000;
+                downerText.textContent = "Fertig";
+                console.log("Player 2:", this.stopTimePlayer2.toFixed(3));
+                this.checkGameover()
+            }
         }
     }
-
-    updatePlayerUI(playerId, mainText, noticeText) {
-        document.getElementById(`${playerId}Time`).textContent = mainText;
-        document.getElementById(`${playerId}Notice`).textContent = noticeText;
+    checkGameover() {
+        if (!this.player2Running && this.stopTimePlayer2 > 0 && !this.player1Running && this.stopTimePlayer1 > 0) {
+            const diff1 = (this.stopTimePlayer1 - this.stopTimeGoal).toFixed(2);
+            const diff2 = (this.stopTimePlayer2 - this.stopTimeGoal).toFixed(2);
+            document.getElementById("upperTime").textContent = diff1 > diff2 ? "Klattschen" : "";
+            document.getElementById("downerTime").textContent = diff2 > diff1 ? "Klattschen" : "";
+            document.getElementById("upperNotice").textContent = `${this.stopTimePlayer1.toFixed(2)}`;
+            document.getElementById("downerNotice").textContent = `${this.stopTimePlayer2.toFixed(2)}`;
+        }
     }
 }
 
 const currentGame = new Game("Mannschafts-Klattschen", "ressources/klattschen.png", "Mini-Games 2.0")
 const games = [
-    /*new WordRoulette(),
+    new WordRoulette(),
     new CountAndSound(),
     new Luftmalerei(),
     new WordChain(),
-    new CounterStrike(),*/
+    new CounterStrike(),
     new WouldYouRather(),
     new TimeStopper()
 ]
