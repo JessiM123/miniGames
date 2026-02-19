@@ -80,7 +80,7 @@ class CounterStrike extends Game {
     constructor() {
         super(
             "Counter-Strike",
-            "ressources/counterChallange.png",
+            "ressources/counterStrike.png",
             "Ihr zählt gemeinsam bis 8 (wenn ihr weniger seid: bis Anzahl der Spieler - 1). Du fängst mit 1 an. Danach gibt es keine Reihenfolge oder Absprache wer die nächst höhere Zahl nennt. " +
             "Jeder darf nur eine Zahl sagen.<br>" +
             "Wenn eine Zahl <b>gleichzeitig mehrfach</b> gesagt wird, klattschen diese Mitspieler und das Spiel ist vorbei.<br>" +
@@ -112,7 +112,13 @@ class TimeStopper extends Game {
     player2Running = false;
     stopTimePlayer1 = 0;
     stopTimePlayer2 = 0;
-    constructor() { super("Schneller als die Zeit erlaubt", "", "") }
+    constructor() {
+        super(
+            "Schneller als die Zeit erlaubt",
+            "ressources/timeStopper.png",
+            "Beschreibung wird generiert."
+        )
+    }
     reset() {
         this.player1Start = null;
         this.player2Start = null;
@@ -188,7 +194,7 @@ class StarredEyes extends Game {
     constructor() {
         super(
             "Starre Augen",
-            "",
+            "ressources/starredEyes.png",
             "Alle schließen ihre <b>Augen</b>. Gleichzeitig <b>öffnet</b> ihr sie wieder und schaut dabei genau <b>eine andere</b> Person an.<br><br>" +
             "Schaut ihr euch dann <b>gegenseitig</b> in die Augen - klattscht ihr.",
         )
@@ -198,8 +204,9 @@ class NeverHaveIEver extends Game {
     constructor() {
         super(
             "Ich hab' noch nie ...",
-            "",
-            "Spielt classic eine Runde 'Ich hab noch nie...'"
+            "ressources/neverHaveIEver.png",
+            "Spielt eine classic Runde 'Ich hab noch nie...'.<br><br>" +
+            "Du stellst die Frage, musst aber nicht antworten."
         )
     }
 }
@@ -207,7 +214,7 @@ class KlattschBattle extends Game {
     constructor() {
         super(
             "Klattsch-Battle",
-            "",
+            "ressources/klattschBattle.png",
             "Du klatschst nach <b>links</b> und sagt 'Ho', oder nach <b>rechts</b> mit 'Ha'. Je nachdem was du wählst, ist danach deine linke bzw. rechte Mitspielerin dran. " +
             "Euch erwarten wilde <b>Richtungswechsel</b> - aber beeilt euch!<br><br>" +
             "Wer zuerst <b>falsch klatscht</b> (entweder nicht dran war, oder links und rechts mit 'Ho' und 'Ha' vertauscht) beendet das Spiel und klattscht."
