@@ -23,7 +23,7 @@ class Game {
 }
 class WordRoulette extends Game {
     minWordLength = Math.ceil(3)
-    maxWordLength = Math.floor(6)
+    maxWordLength = Math.floor(5)
     constructor() {
         super("Buchstaben-Roulette",
             "ressources/wordRoulette.png",
@@ -184,6 +184,46 @@ class TimeStopper extends Game {
         }
     }
 }
+class StarredEyes extends Game {
+    constructor() {
+        super(
+            "Starre Augen",
+            "",
+            "Alle schließen ihre <b>Augen</b>. Gleichzeitig <b>öffnet</b> ihr sie wieder und schaut dabei genau <b>eine andere</b> Person an.<br><br>" +
+            "Schaut ihr euch dann <b>gegenseitig</b> in die Augen - klattscht ihr.",
+        )
+    }
+}
+class NeverHaveIEver extends Game {
+    constructor() {
+        super(
+            "Ich hab' noch nie ...",
+            "",
+            "Spielt classic eine Runde 'Ich hab noch nie...'"
+        )
+    }
+}
+class KlattschBattle extends Game {
+    constructor() {
+        super(
+            "Klattsch-Battle",
+            "",
+            "Du klatschst nach <b>links</b> und sagt 'Ho', oder nach <b>rechts</b> mit 'Ha'. Je nachdem was du wählst, ist danach deine linke bzw. rechte Mitspielerin dran. " +
+            "Euch erwarten wilde <b>Richtungswechsel</b> - aber beeilt euch!<br><br>" +
+            "Wer zuerst <b>falsch klatscht</b> (entweder nicht dran war, oder links und rechts mit 'Ho' und 'Ha' vertauscht) beendet das Spiel und klattscht."
+        )
+    }
+}
+class WhoAmI extends Game { //TODO 
+    constructor() {
+        super(
+            "Wer bin ich?",
+            "",
+            ""
+        )
+    }
+}
+
 
 const currentGame = new Game("Mannschafts-Klattschen", "ressources/klattschen.png", "Mini-Games 2.0")
 const games = [
@@ -193,7 +233,11 @@ const games = [
     new WordChain(),
     new CounterStrike(),
     new WouldYouRather(),
-    new TimeStopper()
+    new TimeStopper(),
+    new StarredEyes(),
+    new NeverHaveIEver(),
+    new KlattschBattle(),
+    new WhoAmI()
 ]
 let lastGameIndex = -1;
 function newGame() {
