@@ -327,12 +327,14 @@ class KlattschBattle extends Game {
         )
     }
 }
-class WhoAmI extends Game { //TODO 
+class IchSeheWasWasDuNichtSiehst extends Game {
     constructor() {
         super(
-            "Wer bin ich?",
-            "ressources/WhoAmI.png",
-            ""
+            "Ich sehe was, was du nicht siehst",
+            "ressources/ichSeheWasWasDuNichtSiehst.png",
+            `Schließe deine Augen. Deine rechte Mitspielerin stellt dir eine "Ich sehe was, was du nicht siehst"-Aufgabe 
+            z. B. "schwarze Dinge" oder "Dinge die kleiner sind als ein Stuhl". Du musst 4 Dinge nennen können.<br><br>
+            Schaffst du es nicht, klattscht du.`
         )
     }
 }
@@ -438,6 +440,7 @@ const games = [
     new NeverHaveIEver(),
     new KlattschBattle(),
     new TouchMeIfYouCan(),
+    new IchSeheWasWasDuNichtSiehst(),
     //new WhoAmI(),
 ]
 
