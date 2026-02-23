@@ -1,8 +1,24 @@
 const alphabet = "ABCDEFGHIJKLMNOPRSTUWZ".split("");
-function _randomBuchstabe() {
+function randomLetter() {
     return alphabet[Math.floor(Math.random() * alphabet.length)];
 }
 
+class OverlayController {
+
+    constructor() {
+        this.overlay = document.getElementById("timeOverlay");
+        this.goalText = document.getElementById("timeStopGoal");
+    }
+
+    open(goal) {
+        this.goalText.textContent = `${goal} Sekunden`;
+        this.overlay.classList.remove("hidden");
+    }
+
+    close() {
+        this.overlay.classList.add("hidden");
+    }
+}
 class Game {
     constructor(name, img, description) {
         this.name = name;
@@ -10,37 +26,36 @@ class Game {
         this.description = description;
     }
 
-    _render() {
-        document.getElementById("cardImg").src = this.img;
-        document.getElementById("cardName").textContent = this.name;
-        document.getElementById("cardDescription").innerHTML = this.description;
-    }
-
     start() {
-        console.log("Game started");
-        card.classList.remove("clickable");
-        card.replaceWith(card.cloneNode(true)); // entfernt alle Listener
-        this._render()
+        return {
+            name: this.name,
+            img: this.img,
+            description: this.description,
+            type: "default"
+        };
     }
 }
 class WordRoulette extends Game {
-    minWordLength = Math.ceil(3)
-    maxWordLength = Math.floor(5)
     constructor() {
         super("Buchstaben-Roulette",
             "ressources/wordRoulette.png",
-            "Ihr spielt Buchstaben-Roulette"
+            ""
         );
     }
 
     start() {
-        const randomLetter = _randomBuchstabe()
-        const randomNumber = Math.floor(Math.random() * (this.maxWordLength - this.minWordLength + 1) + this.minWordLength)
-        this.description =
-            `Finde ein <b>${randomNumber}-Buchstaben-Wort</b>, das mit <b>${randomLetter}</b> beginnt!<br>` +
-            "Du fängst an, danach geht es reihum weiter.<br><br>" +
-            "Wer <b>kein</b> Wort mehr findet oder ein <b>falsches</b> sagt, muss klattschen."
-        this._render()
+        const randomNumber = Math.floor(Math.random() * 3) + 3; // 3–5
+        const letter = randomLetter();
+
+        return {
+            name: this.name,
+            img: this.img,
+            description:
+                `Finde ein <b>${randomNumber}-Buchstaben-Wort</b>, das mit <b>${letter}</b> beginnt!<br>
+                Du fängst an, danach geht es reihum weiter.<br><br>
+                Wer <b>kein</b> Wort mehr findet oder ein <b>falsches</b> sagt, muss klattschen.`,
+            type: "default"
+        };
     }
 }
 class CountAndSound extends Game {
@@ -105,22 +120,25 @@ class WouldYouRather extends Game {
     }
 }
 class TimeStopper extends Game {
-    maxSeconds = 20
-    minSeconds = 1
-    stopTimeGoal = 0
-    player1Start = null;
-    player2Start = null;
-    player1Running = false;
-    player2Running = false;
-    stopTimePlayer1 = 0;
-    stopTimePlayer2 = 0;
-    constructor() {
+    constructor(min = 1, max = 20) {
         super(
             "Schneller als die Zeit erlaubt",
             "ressources/timeStopper.png",
             "Beschreibung wird generiert."
-        )
+        );
+        this.maxSeconds = max;
+        this.minSeconds = min;
+
+        this.stopTimeGoal = 0;
+
+        this.player1Start = null;
+        this.player2Start = null;
+        this.player1Running = false;
+        this.player2Running = false;
+        this.stopTimePlayer1 = 0;
+        this.stopTimePlayer2 = 0;
     }
+
     reset() {
         this.player1Start = null;
         this.player2Start = null;
@@ -128,70 +146,173 @@ class TimeStopper extends Game {
         this.player2Running = false;
         this.stopTimePlayer1 = 0;
         this.stopTimePlayer2 = 0;
-        document.getElementById("upperTime").textContent = "Start"; document.getElementById("downerTime").textContent = "Start";
-        document.getElementById("upperNotice").textContent = ""; document.getElementById("downerNotice").textContent = "";
     }
+
     start() {
-        this.reset()
-        card.classList.remove("clickable");
-        card.replaceWith(card.cloneNode(true)); // entfernt alle Listener
-        this.stopTimeGoal = (Math.random() * (this.maxSeconds - this.minSeconds + 1) + this.minSeconds).toFixed(2)
-        this.description = `Suche dir eine Gegnerin aus.<br> Euer Ziel ist es, den Button bei <b>${this.stopTimeGoal}</b> Sekunden zu stoppen! <br>` +
-            `Dabei seht ihr nicht, wie lange die Zeit bereits läuft.Wer weiter von der Zielzeit weg ist, klattscht! <br> <br>` +
-            `Klickt auf die Spielbeschreibung, um zum Spielfeld zu kommen.`
-        this._render()
-        document.getElementById("card").onclick = () => { this.openOverlay() };
-        document.getElementById("timeStopGoal").onclick = () => { this.closeOverlay() };
+        return {
+            name: this.name,
+            img: this.img,
+            description:
+                `Suche dir eine Gegnerin aus.<br>
+            Euer Ziel ist es, den Button bei einer zufälligen Zeit zu stoppen!<br><br>
+            Klickt auf die Spielbeschreibung, um zu starten.`,
+            type: "timestopper"
+        }
     }
-    openOverlay() {
-        const overlay = document.getElementById("timeOverlay"); overlay.classList.remove("hidden");
-        document.getElementById("timeStopGoal").textContent = `${this.stopTimeGoal} Sekunden`;
-        this.initPlayerLogic();
+
+    generateGoal() {
+        this.stopTimeGoal =
+            (Math.random() * (this.maxSeconds - this.minSeconds + 1)
+                + this.minSeconds).toFixed(2);
     }
-    closeOverlay() {
-        const overlay = document.getElementById("timeOverlay");
-        overlay.classList.add("hidden"); // Overlay ausblenden 
+
+    startPlayer(player) {
+        if (player === 1 && !this.player1Running && this.stopTimePlayer1 === 0) {
+            this.player1Start = performance.now();
+            this.player1Running = true;
+        }
+
+        if (player === 2 && !this.player2Running && this.stopTimePlayer2 === 0) {
+            this.player2Start = performance.now();
+            this.player2Running = true;
+        }
     }
-    initPlayerLogic() {
-        const upper = document.getElementById("upperSide");
-        const downer = document.getElementById("downerSide");
-        const upperText = document.getElementById("upperTime");
-        const downerText = document.getElementById("downerTime");
-        upper.ontouchstart = () => {
-            if (!this.player1Running && this.stopTimePlayer1 === 0) {
-                this.player1Start = performance.now();
-                this.player1Running = true; upperText.textContent = "";
-            }
-            else if (this.player1Running) {
-                this.player1Running = false;
-                this.stopTimePlayer1 = (performance.now() - this.player1Start) / 1000;
-                upperText.textContent = "Fertig"; console.log("Player 1:",
-                    this.stopTimePlayer1.toFixed(3)); this.checkGameover()
-            }
+
+    stopPlayer(player) {
+        if (player === 1 && this.player1Running) {
+            this.player1Running = false;
+            this.stopTimePlayer1 =
+                (performance.now() - this.player1Start) / 1000;
+        }
+
+        if (player === 2 && this.player2Running) {
+            this.player2Running = false;
+            this.stopTimePlayer2 =
+                (performance.now() - this.player2Start) / 1000;
+        }
+    }
+
+    isFinished() {
+        return (
+            !this.player2Running &&
+            this.stopTimePlayer2 > 0 &&
+            !this.player1Running &&
+            this.stopTimePlayer1 > 0
+        );
+    }
+
+    getResult() {
+        const diff1 =
+            (this.stopTimePlayer1 - this.stopTimeGoal).toFixed(2);
+
+        const diff2 =
+            (this.stopTimePlayer2 - this.stopTimeGoal).toFixed(2);
+
+        return {
+            diff1,
+            diff2,
+            player1Time: this.stopTimePlayer1.toFixed(2),
+            player2Time: this.stopTimePlayer2.toFixed(2),
+            loserUpper: diff1 > diff2,
+            loserLower: diff2 > diff1
         };
-        downer.ontouchstart = () => {
-            if (!this.player2Running && this.stopTimePlayer2 === 0) {
-                this.player2Start = performance.now();
-                this.player2Running = true; downerText.textContent = "";
-            }
-            else if (this.player2Running) {
-                this.player2Running = false;
-                this.stopTimePlayer2 = (performance.now() - this.player2Start) / 1000;
-                downerText.textContent = "Fertig";
-                console.log("Player 2:", this.stopTimePlayer2.toFixed(3));
-                this.checkGameover()
+    }
+}
+class TimeStopperController {
+    constructor() {
+        this.overlay = document.getElementById("timeOverlay");
+        this.goalText = document.getElementById("timeStopGoal");
+
+        this.upper = document.getElementById("upperSide");
+        this.lower = document.getElementById("downerSide");
+
+        this.upperTime = document.getElementById("upperTime");
+        this.lowerTime = document.getElementById("downerTime");
+
+        this.upperNotice = document.getElementById("upperNotice");
+        this.lowerNotice = document.getElementById("downerNotice");
+
+        this.game = new TimeStopper();
+    }
+
+    startNewGame() {
+        this.game.reset();
+        this.game.generateGoal();
+
+        this.resetUI();
+
+        this.goalText.textContent =
+            `${this.game.stopTimeGoal} Sekunden`;
+
+        this.overlay.classList.remove("hidden");
+
+        this.bindEvents();
+    }
+
+    resetUI() {
+        this.upperTime.textContent = "Start";
+        this.lowerTime.textContent = "Start";
+        this.upperNotice.textContent = "";
+        this.lowerNotice.textContent = "";
+    }
+
+    bindEvents() {
+
+        this.upper.ontouchstart = () => this.handlePlayer(1);
+        this.lower.ontouchstart = () => this.handlePlayer(2);
+    }
+
+    handlePlayer(player) {
+
+        const running =
+            player === 1
+                ? this.game.player1Running
+                : this.game.player2Running;
+
+        const stoppedTime =
+            player === 1
+                ? this.game.stopTimePlayer1
+                : this.game.stopTimePlayer2;
+
+        if (!running && stoppedTime === 0) {
+            this.game.startPlayer(player);
+            if (player === 1) this.upperTime.textContent = "";
+            if (player === 2) this.lowerTime.textContent = "";
+        }
+        else if (running) {
+            this.game.stopPlayer(player);
+
+            if (player === 1)
+                this.upperTime.textContent = "Fertig";
+
+            if (player === 2)
+                this.lowerTime.textContent = "Fertig";
+
+            if (this.game.isFinished()) {
+                this.finishGame();
             }
         }
     }
-    checkGameover() {
-        if (!this.player2Running && this.stopTimePlayer2 > 0 && !this.player1Running && this.stopTimePlayer1 > 0) {
-            const diff1 = (this.stopTimePlayer1 - this.stopTimeGoal).toFixed(2);
-            const diff2 = (this.stopTimePlayer2 - this.stopTimeGoal).toFixed(2);
-            document.getElementById("upperTime").textContent = diff1 > diff2 ? "Klattschen" : "";
-            document.getElementById("downerTime").textContent = diff2 > diff1 ? "Klattschen" : "";
-            document.getElementById("upperNotice").textContent = `${this.stopTimePlayer1.toFixed(2)}`;
-            document.getElementById("downerNotice").textContent = `${this.stopTimePlayer2.toFixed(2)}`;
-        }
+
+    finishGame() {
+
+        const result = this.game.getResult();
+
+        this.upperTime.textContent =
+            result.loserUpper ? "Klattschen" : "";
+
+        this.lowerTime.textContent =
+            result.loserLower ? "Klattschen" : "";
+
+        this.upperNotice.textContent =
+            result.player1Time;
+
+        this.lowerNotice.textContent =
+            result.player2Time;
+    }
+
+    close() {
+        this.overlay.classList.add("hidden");
     }
 }
 class StarredEyes extends Game {
@@ -262,15 +383,58 @@ const games = [
     new KlattschBattle(),
     new WhoAmI()
 ]
-let lastGameIndex = -1;
-function newGame() {
-    do {
-        randomIndex = Math.floor(Math.random() * games.length);
-    } while (randomIndex == lastGameIndex);
 
-    lastGameIndex = randomIndex;
-    games[randomIndex].start()
+class GameRenderer {
+    constructor() {
+        this.card = document.getElementById("card");
+        this.cardImg = document.getElementById("cardImg");
+        this.cardName = document.getElementById("cardName");
+        this.cardDescription = document.getElementById("cardDescription");
+    }
+
+    render(gameData) {
+        this.cardImg.src = gameData.img;
+        this.cardName.textContent = gameData.name;
+        this.cardDescription.innerHTML = gameData.description;
+
+        this.card.onclick = null;
+
+        if (gameData.type === "timestopper") {
+            this.card.onclick = () => timeStopperController.startNewGame();
+        }
+    }
 }
+class GameManager {
+    constructor(games, renderer) {
+        this.games = games;
+        this.renderer = renderer;
+        this.lastIndex = -1;
+    }
 
-document.getElementById("repickBtn").addEventListener("click", newGame);
-window.onload = currentGame.start()
+    newGame() {
+        let index;
+
+        do {
+            index = Math.floor(Math.random() * this.games.length);
+        } while (index === this.lastIndex);
+
+        this.lastIndex = index;
+
+        const game = this.games[index]
+        const gameData = game.start();
+        this.renderer.render(gameData);
+    }
+}
+const timeStopperController = new TimeStopperController();
+const renderer = new GameRenderer();
+const overlayController = new OverlayController();
+const manager = new GameManager(games, renderer);
+
+document.getElementById("repickBtn")
+    .addEventListener("click", () => manager.newGame());
+
+//window.onload = () => manager.newGame();
+
+document.getElementById("timeStopGoal")
+    .addEventListener("click", () => overlayController.close());
+window.onload = renderer.render(currentGame.start())
