@@ -333,7 +333,7 @@ class IchSeheWasWasDuNichtSiehst extends Game {
             "Ich sehe was, was du nicht siehst",
             "ressources/ichSeheWasWasDuNichtSiehst.png",
             `Schließe deine Augen. Deine rechte Mitspielerin stellt dir eine "Ich sehe was, was du nicht siehst"-Aufgabe 
-            z. B. "schwarze Dinge" oder "Dinge die kleiner sind als ein Stuhl". Du musst 4 Dinge nennen können.<br><br>
+            z. B. "schwarze Dinge" oder "Dinge die kleiner sind als ein Stuhl". Du musst aus dem Gedächtnis 4 Dinge nennen können, die die anderen auch sehen können.<br><br>
             Schaffst du es nicht, klattscht du.`
         )
     }
