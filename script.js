@@ -337,9 +337,9 @@ class WhoAmI extends Game { //TODO
     }
 }
 class TouchMeIfYouCan extends Game {
-    constructor(min = 1, max = 5) {
+    constructor(min = 1, max = 300) {
         super(
-            "Touch me if you can",
+            "Touch Me If You Can",
             "ressources/touchMeIfYouCan.png",
             ""
         );
@@ -396,7 +396,7 @@ class TouchMeIfYouCanController {
     onTimerEnd(letter) {
         return new Promise((resolve) => {
             this.letterText.textContent = letter;
-            this.audio.currentTime = 1.45;
+            this.audio.currentTime = 1.5;
             this.audio.play();
             this.overlay.classList.remove("hidden");
 
@@ -404,7 +404,7 @@ class TouchMeIfYouCanController {
             setTimeout(() => {
                 this.overlay.classList.add("hidden");
                 resolve();
-            }, 2000);
+            }, 1000);
         });
     }
 }
@@ -422,6 +422,7 @@ const games = [
     new NeverHaveIEver(),
     new KlattschBattle(),
     new TouchMeIfYouCan(),
+    new WhoAmI(),
 ]
 
 class GameRenderer {
