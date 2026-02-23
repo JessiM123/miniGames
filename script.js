@@ -337,7 +337,7 @@ class WhoAmI extends Game { //TODO
     }
 }
 class TouchMeIfYouCan extends Game {
-    constructor(min = 1, max = 300) {
+    constructor(min = 1, max = 5) {
         super(
             "Touch me if you can",
             "ressources/touchMeIfYouCan.png",
@@ -396,11 +396,10 @@ class TouchMeIfYouCanController {
     onTimerEnd(letter) {
         return new Promise((resolve) => {
             this.letterText.textContent = letter;
-            this.audio.currentTime = 0.85;
+            this.audio.currentTime = 1.45;
             this.audio.play();
-            setTimeout(() => {
-                this.overlay.classList.remove("hidden");
-            }, 900);
+            this.overlay.classList.remove("hidden");
+
 
             setTimeout(() => {
                 this.overlay.classList.add("hidden");
@@ -454,11 +453,9 @@ class GameManager {
         do {
             index = Math.floor(Math.random() * this.games.length);
             game = this.games[index]
-            console.log("in do while " + game.constructor.name)
         } while (index === this.lastIndex || (game instanceof TouchMeIfYouCan && game.isRunning()));
 
         this.lastIndex = index;
-        console.log("starte spiel" + game.constructor.name)
         const gameData = game.start();
         this.renderer.render(gameData);
     }
