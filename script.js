@@ -2,23 +2,6 @@ const alphabet = "ABCDEFGHIJKLMNOPRSTUWZ".split("");
 function randomLetter() {
     return alphabet[Math.floor(Math.random() * alphabet.length)];
 }
-
-class OverlayController {
-
-    constructor() {
-        this.overlay = document.getElementById("timeOverlay");
-        this.goalText = document.getElementById("timeStopGoal");
-    }
-
-    open(goal) {
-        this.goalText.textContent = `${goal} Sekunden`;
-        this.overlay.classList.remove("hidden");
-    }
-
-    close() {
-        this.overlay.classList.add("hidden");
-    }
-}
 class Game {
     constructor(name, img, description) {
         this.name = name;
@@ -30,8 +13,7 @@ class Game {
         return {
             name: this.name,
             img: this.img,
-            description: this.description,
-            type: "default"
+            description: this.description
         };
     }
 }
@@ -53,8 +35,7 @@ class WordRoulette extends Game {
             description:
                 `Finde ein <b>${randomNumber}-Buchstaben-Wort</b>, das mit <b>${letter}</b> beginnt!<br>
                 Du fängst an, danach geht es reihum weiter.<br><br>
-                Wer <b>kein</b> Wort mehr findet oder ein <b>falsches</b> sagt, muss klattschen.`,
-            type: "default"
+                Wer <b>kein</b> Wort mehr findet oder ein <b>falsches</b> sagt, muss klattschen.`
         };
     }
 }
@@ -149,6 +130,8 @@ class TimeStopper extends Game {
     }
 
     start() {
+        this.reset()
+        this.generateGoal()
         return {
             name: this.name,
             img: this.img,
@@ -156,7 +139,7 @@ class TimeStopper extends Game {
                 `Suche dir eine Gegnerin aus.<br>
             Euer Ziel ist es, den Button bei einer zufälligen Zeit zu stoppen!<br><br>
             Klickt auf die Spielbeschreibung, um zu starten.`,
-            type: "timestopper"
+            onClick: () => timeStopperController.startNewGame(this)
         }
     }
 
@@ -219,6 +202,7 @@ class TimeStopper extends Game {
     }
 }
 class TimeStopperController {
+    game = null;
     constructor() {
         this.overlay = document.getElementById("timeOverlay");
         this.goalText = document.getElementById("timeStopGoal");
@@ -231,18 +215,14 @@ class TimeStopperController {
 
         this.upperNotice = document.getElementById("upperNotice");
         this.lowerNotice = document.getElementById("downerNotice");
-
-        this.game = new TimeStopper();
     }
 
-    startNewGame() {
-        this.game.reset();
-        this.game.generateGoal();
-
+    startNewGame(timeStopper) {
+        this.game = timeStopper
         this.resetUI();
 
         this.goalText.textContent =
-            `${this.game.stopTimeGoal} Sekunden`;
+            `${timeStopper.stopTimeGoal} Sekunden`;
 
         this.overlay.classList.remove("hidden");
 
@@ -260,6 +240,7 @@ class TimeStopperController {
 
         this.upper.ontouchstart = () => this.handlePlayer(1);
         this.lower.ontouchstart = () => this.handlePlayer(2);
+        this.goalText.addEventListener("click", () => this.overlay.classList.add("hidden"))
     }
 
     handlePlayer(player) {
@@ -355,17 +336,77 @@ class WhoAmI extends Game { //TODO
         )
     }
 }
-class PointToNowhere extends Game { //TODO 
-    constructor() {
+class TouchMeIfYouCan extends Game {
+    constructor(min = 1, max = 300) {
         super(
             "Touch me if you can",
-            "",
+            "ressources/touchMeIfYouCan.png",
             ""
-        )
+        );
+        this.letter = "";
+        this.minSeconds = min;
+        this.maxSeconds = max;
+        this.timer = null;
+        this.onTimerEnd = null;
     }
 
     start() {
+        this.letter = randomLetter()
+        return {
+            name: this.name,
+            img: this.img,
+            description:
+                `Sobald ihr das "Touch-Me"-Signal hört, berührt schnellstmöglich irgendetwas mit dem Anfangsbuchstaben <b>${this.letter}</b>.
+                Die <b>Langsamste</b> klattscht.<br><br>
+                Klicke auf die Spielbeschreibung, um das Spiel zu <b>starten</b> und spielt bis zum Signalton einfach weiter.`,
+            onClick: () => {
+                this.startTimer()
+            }
+        }
+    }
 
+    startTimer() {
+        if (this.timer) {
+            console.log("timer already running");
+            return
+        };
+
+        const randomTime = (Math.random() * (this.maxSeconds - this.minSeconds) + this.minSeconds) * 1000;
+        console.log("randomTime: " + randomTime)
+        this.timer = setTimeout(() => this.finish(), randomTime);
+    }
+    async finish() {
+        if (touchMeIfYouCanController) {
+            await touchMeIfYouCanController.onTimerEnd(this.letter);
+        }
+        this.timer = null;
+    }
+
+    isRunning() {
+        return this.timer ? true : false;
+    }
+}
+class TouchMeIfYouCanController {
+    constructor() {
+        this.overlay = document.getElementById("touchOverlay");
+        this.letterText = document.getElementById("touchLetter");
+        this.audio = new Audio("ressources/touchMeAlert.mp3");
+        this.audio.preload = "auto";
+    }
+    onTimerEnd(letter) {
+        return new Promise((resolve) => {
+            this.letterText.textContent = letter;
+            this.audio.currentTime = 0.85;
+            this.audio.play();
+            setTimeout(() => {
+                this.overlay.classList.remove("hidden");
+            }, 900);
+
+            setTimeout(() => {
+                this.overlay.classList.add("hidden");
+                resolve();
+            }, 2000);
+        });
     }
 }
 
@@ -381,7 +422,7 @@ const games = [
     new StarredEyes(),
     new NeverHaveIEver(),
     new KlattschBattle(),
-    new WhoAmI()
+    new TouchMeIfYouCan(),
 ]
 
 class GameRenderer {
@@ -397,11 +438,7 @@ class GameRenderer {
         this.cardName.textContent = gameData.name;
         this.cardDescription.innerHTML = gameData.description;
 
-        this.card.onclick = null;
-
-        if (gameData.type === "timestopper") {
-            this.card.onclick = () => timeStopperController.startNewGame();
-        }
+        this.card.onclick = gameData.onClick || null
     }
 }
 class GameManager {
@@ -413,28 +450,24 @@ class GameManager {
 
     newGame() {
         let index;
-
+        let game;
         do {
             index = Math.floor(Math.random() * this.games.length);
-        } while (index === this.lastIndex);
+            game = this.games[index]
+            console.log("in do while " + game.constructor.name)
+        } while (index === this.lastIndex || (game instanceof TouchMeIfYouCan && game.isRunning()));
 
         this.lastIndex = index;
-
-        const game = this.games[index]
+        console.log("starte spiel" + game.constructor.name)
         const gameData = game.start();
         this.renderer.render(gameData);
     }
 }
 const timeStopperController = new TimeStopperController();
+const touchMeIfYouCanController = new TouchMeIfYouCanController();
 const renderer = new GameRenderer();
-const overlayController = new OverlayController();
 const manager = new GameManager(games, renderer);
 
 document.getElementById("repickBtn")
     .addEventListener("click", () => manager.newGame());
-
-//window.onload = () => manager.newGame();
-
-document.getElementById("timeStopGoal")
-    .addEventListener("click", () => overlayController.close());
 window.onload = renderer.render(currentGame.start())

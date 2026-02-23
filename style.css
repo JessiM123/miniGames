@@ -7,7 +7,6 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    min-height: 100vh;
     background: #f0f0f0;
 }
 
@@ -18,7 +17,6 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-height: 75%;
     padding: 1rem;
 }
 
@@ -67,7 +65,7 @@ body {
 .repick-btn {
     width: 50%;
     max-width: 400px;
-    margin: 2rem;
+    margin: 1rem;
     padding: 1rem;
     font-size: 1.2rem;
     background-color: #c30d0d;
@@ -76,10 +74,11 @@ body {
     border-radius: 8px;
     cursor: pointer;
     transition: 0.2s;
-}
-
-.repick-btn:hover {
-    background-color: #45a049;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
 }
 
 /* Stop Timer */
@@ -130,6 +129,25 @@ body {
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
+}
+
+.fullSize {
+    background-color: #000000;
+}
+
+.fullSizeContent {
+    color: white;
+    font-weight: bold;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    font-size: 50vw;
+    line-height: 1;
 }
 
 
