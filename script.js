@@ -18,6 +18,8 @@ class Game {
 
     start() {
         console.log("Game started");
+        card.classList.remove("clickable");
+        card.replaceWith(card.cloneNode(true)); // entfernt alle Listener
         this._render()
     }
 }
@@ -131,6 +133,8 @@ class TimeStopper extends Game {
     }
     start() {
         this.reset()
+        card.classList.remove("clickable");
+        card.replaceWith(card.cloneNode(true)); // entfernt alle Listener
         this.stopTimeGoal = (Math.random() * (this.maxSeconds - this.minSeconds + 1) + this.minSeconds).toFixed(2)
         this.description = `Suche dir eine Gegnerin aus.<br> Euer Ziel ist es, den Button bei <b>${this.stopTimeGoal}</b> Sekunden zu stoppen! <br>` +
             `Dabei seht ihr nicht, wie lange die Zeit bereits läuft.Wer weiter von der Zielzeit weg ist, klattscht! <br> <br>` +
@@ -230,7 +234,19 @@ class WhoAmI extends Game { //TODO
         )
     }
 }
+class PointToNowhere extends Game { //TODO 
+    constructor() {
+        super(
+            "Touch me if you can",
+            "",
+            ""
+        )
+    }
 
+    start() {
+
+    }
+}
 
 const currentGame = new Game("Mannschafts-Klattschen", "ressources/klattschen.png", "Mini-Games 2.0")
 const games = [
