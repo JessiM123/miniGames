@@ -417,12 +417,15 @@ class TouchMeIfYouCanController {
         Du kannst weiterspielen!`
     }
 }
-class TEST extends Game { //TODO 
+class Jukebox extends Game {
     constructor() {
         super(
-            "Wer bin ich?",
-            "ressources/WhoAmI.png",
-            ""
+            "Jukebox",
+            "ressources/jukebox.png",
+            `Du nennst ein Wort. Wer zuerst die Stelle eines Liedes, in dem dieses Wort vorkommt, aufsagt oder singt, verteilt 2 Klattscher. <br><br>
+            Hinweise:<br>
+            1. man darf die Sprachen wechseln (Du sagst <b>"Herz"</b> -> gesungen wird "that my <b>heart</b> will go on".) <br>
+            2. Verben dürfen in allen Zeitformen genutzt werden (Du sagst <b>"gehen"</b> -> gesagt wird "also <b>ging</b> ich diese Straße lang")`
         )
     }
 }
@@ -441,6 +444,7 @@ const games = [
     new KlattschBattle(),
     new TouchMeIfYouCan(),
     new IchSeheWasWasDuNichtSiehst(),
+    new Jukebox(),
     //new WhoAmI(),
 ]
 
