@@ -331,7 +331,7 @@ class WhoAmI extends Game { //TODO
     constructor() {
         super(
             "Wer bin ich?",
-            "",
+            "ressources/WhoAmI.png",
             ""
         )
     }
@@ -360,7 +360,8 @@ class TouchMeIfYouCan extends Game {
                 Die <b>Langsamste</b> klattscht.<br><br>
                 Klicke auf die Spielbeschreibung, um das Spiel zu <b>starten</b> und spielt bis zum Signalton einfach weiter.`,
             onClick: () => {
-                this.startTimer()
+                this.startTimer();
+                touchMeIfYouCanController.gameStartedNotification()
             }
         }
     }
@@ -390,6 +391,7 @@ class TouchMeIfYouCanController {
     constructor() {
         this.overlay = document.getElementById("touchOverlay");
         this.letterText = document.getElementById("touchLetter");
+        this.cardDescription = document.getElementById("cardDescription");
         this.audio = new Audio("ressources/touchMeAlert.mp3");
         this.audio.preload = "auto";
     }
@@ -407,6 +409,20 @@ class TouchMeIfYouCanController {
             }, 1000);
         });
     }
+    gameStartedNotification() {
+        this.cardDescription.innerHTML =
+            `Spiel wurde gestartet.<br><br>
+        Du kannst weiterspielen!`
+    }
+}
+class TEST extends Game { //TODO 
+    constructor() {
+        super(
+            "Wer bin ich?",
+            "ressources/WhoAmI.png",
+            ""
+        )
+    }
 }
 
 const currentGame = new Game("Mannschafts-Klattschen", "ressources/klattschen.png", "Mini-Games 2.0")
@@ -422,7 +438,7 @@ const games = [
     new NeverHaveIEver(),
     new KlattschBattle(),
     new TouchMeIfYouCan(),
-    new WhoAmI(),
+    //new WhoAmI(),
 ]
 
 class GameRenderer {
@@ -455,7 +471,7 @@ class GameManager {
             index = Math.floor(Math.random() * this.games.length);
             game = this.games[index]
         } while (index === this.lastIndex || (game instanceof TouchMeIfYouCan && game.isRunning()));
-
+        console.log(game.constructor.name)
         this.lastIndex = index;
         const gameData = game.start();
         this.renderer.render(gameData);
