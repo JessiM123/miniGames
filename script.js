@@ -57,8 +57,9 @@ class Luftmalerei extends Game {
             "ressources/luftmalerei.png",
             "Zeichne etwas mit deinem Finger in die Luft.<br>" +
             "Du hast <b>2 Versuche</b>.<br><br>" +
-            "Wird dein Bild erraten, klattschen <b>alle ohne</b> richtige Antwort.<br>" +
-            "Errät es <b>niemand</b>, musst du klattschen."
+            "Wer dein Bild <b>zuerst</b> errät, verteilt 1 Klattscher.<br>" +
+            `Errät es <b>niemand</b>, musst du klattschen. <br><br>
+            Hinweis: alle dürfen durcheinander raten`
         )
     }
 }
