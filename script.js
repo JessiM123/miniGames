@@ -446,7 +446,6 @@ class NoiseMaker extends Game {
     }
 }
 
-const currentGame = new Game("Mannschafts-Klattschen", "ressources/klattschen.png", "Mini-Games 2.0")
 const games = [
     new WordRoulette(),
     new CountAndSound(),
@@ -557,4 +556,4 @@ const manager = new GameManager(games, renderer);
 
 document.getElementById("repickBtn")
     .addEventListener("click", () => manager.newGame());
-window.onload = renderer.render(currentGame.start())
+window.onload = renderer.render(new Game("Mannschafts-Klattschen", "ressources/klattschen.png", "Mini-Games 2.0").start())
