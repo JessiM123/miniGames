@@ -431,6 +431,21 @@ class Jukebox extends Game {
     }
 }
 
+class NoiseMaker extends Game {
+    constructor() {
+        super(
+            "What does the fox say?",
+            "ressources/noiseMaker.png",
+           `Deine linke Mitspielerin flüstert dir zu, welches Geräusch zu machen sollst (z. B. "Bohrer", "Bauchklatscher", "Elefant").<br>
+           Du darfst dafür nur deine Stimme benutzen, also kein Klatschen, Schnipsen oder ähnliches. <br>
+            Du hast <b>2 Versuche</b>.<br><br>
+            Wer dein Geräusch <b>zuerst</b> errät, verteilt 1 Klattscher.<br>
+            Errät es <b>niemand</b>, musst du klattschen. <br><br>
+            Hinweis: alle dürfen durcheinander raten`
+        )
+    }
+}
+
 const currentGame = new Game("Mannschafts-Klattschen", "ressources/klattschen.png", "Mini-Games 2.0")
 const games = [
     new WordRoulette(),
@@ -446,7 +461,8 @@ const games = [
     new TouchMeIfYouCan(),
     new IchSeheWasWasDuNichtSiehst(),
     new Jukebox(),
-    //new WhoAmI(),
+    new NoiseMaker(),
+    
 ]
 
 class GameRenderer {
@@ -473,18 +489,66 @@ class GameManager {
     }
 
     newGame() {
-        let index;
-        let game;
+        const activeGames = settingsController.getActiveGames();
+        if (activeGames.length === 0) return; // Sicherheit
+        let index, game;
         do {
-            index = Math.floor(Math.random() * this.games.length);
-            game = this.games[index]
-        } while (index === this.lastIndex || (game instanceof TouchMeIfYouCan && game.isRunning()));
-        console.log(game.constructor.name)
+            index = Math.floor(Math.random() * activeGames.length);
+            game = activeGames[index];
+        } while (activeGames.length > 1 && index === this.lastIndex
+                || (game instanceof TouchMeIfYouCan && game.isRunning()));
         this.lastIndex = index;
-        const gameData = game.start();
-        this.renderer.render(gameData);
+        this.renderer.render(game.start());
     }
 }
+
+// Settings
+class SettingsController {
+    constructor(games) {
+        this.games = games;
+        this.disabledGames = new Set();
+        this.overlay = document.getElementById("settingsOverlay");
+        this.list = document.getElementById("settingsList");
+
+        document.getElementById("settingsBtn")
+            .addEventListener("click", () => this.open());
+        document.getElementById("settingsCloseBtn")
+            .addEventListener("click", () => this.close());
+
+        this.render();
+    }
+
+    render() {
+        this.list.innerHTML = "";
+        this.games.forEach((game, index) => {
+            const enabled = !this.disabledGames.has(index);
+            const item = document.createElement("div");
+            item.className = "settings-item" + (enabled ? "" : " disabled");
+            item.innerHTML = `
+                <span>${game.name}</span>
+                <label class="toggle">
+                    <input type="checkbox" ${enabled ? "checked" : ""}>
+                    <span class="toggle-slider"></span>
+                </label>`;
+            item.querySelector("input").addEventListener("change", (e) => {
+                if (e.target.checked) this.disabledGames.delete(index);
+                else this.disabledGames.add(index);
+                item.classList.toggle("disabled", !e.target.checked);
+            });
+            this.list.appendChild(item);
+        });
+    }
+
+    getActiveGames() {
+        return this.games.filter((_, i) => !this.disabledGames.has(i));
+    }
+
+    open() { this.overlay.classList.remove("hidden"); }
+    close() { this.overlay.classList.add("hidden"); }
+}
+
+const settingsController = new SettingsController(games);
+
 const timeStopperController = new TimeStopperController();
 const touchMeIfYouCanController = new TouchMeIfYouCanController();
 const renderer = new GameRenderer();
