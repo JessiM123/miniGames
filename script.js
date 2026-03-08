@@ -489,6 +489,7 @@ class GameManager {
     }
 
     newGame() {
+        document.getElementById("settingsBtn").style.display = "none";
         const activeGames = settingsController.getActiveGames();
         if (activeGames.length === 0) return; // Sicherheit
         let index, game;
