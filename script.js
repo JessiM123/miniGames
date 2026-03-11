@@ -7,8 +7,8 @@ const wordFlashWords = [
 ];
 
 const wordFlashColors = [
-    "#fd0c20", "#27911e", "#e7bd51", "#382cdf", "#000000",
-    "#fc15f0", "#9300a7", "#7c7878"
+    "#fd0c20", "#13b804", "#f1e429", "#2342f3", "#000000",
+    "#fc15f0", "#9300a7", "#948f8f"
 ];
 
 function randomLetter() {
@@ -478,7 +478,6 @@ class WordFlash extends Game {
         };
     }
 }
-
 class WordFlashController {
     constructor() {
         this.overlay = document.getElementById("wordFlashOverlay");
@@ -510,7 +509,7 @@ class WordFlashController {
 
     startWords() {
         this.showWord();
-        this.interval = setInterval(() => this.showWord(), 2000);
+        this.interval = setInterval(() => this.showWord(), (Math.random() * (1500 - 1250) + 1250));
     }
 
     showWord() {
