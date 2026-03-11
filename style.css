@@ -12,25 +12,26 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    min-height: 100dvh;
     background: #f0f0f0;
+    justify-content: space-between;
 }
 
 /* Container für die Karte */
 .card-container {
-    flex: 1;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    /* ← statt center */
     justify-content: center;
     width: 100%;
     padding: 1rem;
+    padding-bottom: 0;
 }
 
 /* card */
 .card {
     width: 90%;
     max-width: 400px;
-    min-height: 500px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -56,7 +57,7 @@ body {
 .card .cardName {
     font-size: 1.5rem;
     font-weight: bold;
-    padding: 25px;
+    padding: 10px 20px;
     color: #222;
 }
 
@@ -71,7 +72,6 @@ body {
 .repick-btn {
     width: 50%;
     max-width: 400px;
-    margin: 1rem;
     padding: 1rem;
     font-size: 1.2rem;
     background-color: #c30d0d;
@@ -80,11 +80,10 @@ body {
     border-radius: 8px;
     cursor: pointer;
     transition: 0.2s;
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
+    margin: 1rem auto 1.5rem auto;
+    /* zentriert + Abstand unten */
+    display: block;
+    /* position: fixed  ← weg */
 }
 
 /* Stop Timer */
