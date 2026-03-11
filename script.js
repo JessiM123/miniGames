@@ -542,19 +542,19 @@ class WordFlashController {
 const wordFlashController = new WordFlashController();
 
 const games = [
-    /* new WordRoulette(),
-     new CountAndSound(),
-     new Luftmalerei(),
-     new WordChain(),
-     new CounterStrike(),
-     new WouldYouRather(),
-     new TimeStopper(),
-     new StarredEyes(),
-     new NeverHaveIEver(),
-     new KlattschBattle(),
-     new TouchMeIfYouCan(),
-     new IchSeheWasWasDuNichtSiehst(),
-     new Jukebox(),*/
+    new WordRoulette(),
+    new CountAndSound(),
+    new Luftmalerei(),
+    new WordChain(),
+    new CounterStrike(),
+    new WouldYouRather(),
+    new TimeStopper(),
+    new StarredEyes(),
+    new NeverHaveIEver(),
+    new KlattschBattle(),
+    new TouchMeIfYouCan(),
+    new IchSeheWasWasDuNichtSiehst(),
+    new Jukebox(),
     new NoiseMaker(),
     new WordFlash(),
 
