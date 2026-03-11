@@ -508,8 +508,17 @@ class WordFlashController {
     }
 
     startWords() {
-        this.showWord();
-        this.interval = setInterval(() => this.showWord(), (Math.random() * (1500 - 1250) + 1250));
+        this.currentInterval = 1500;
+        this.minInterval = 950; // Minimum, damit es nicht zu schnell wird
+        this.decayFactor = 0.98; // Jedes Mal 2% schneller
+
+        const scheduleNext = () => {
+            this.showWord();
+            this.currentInterval = Math.max(this.minInterval, this.currentInterval * this.decayFactor);
+            this.interval = setTimeout(scheduleNext, this.currentInterval);
+        };
+
+        scheduleNext();
     }
 
     showWord() {
