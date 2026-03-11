@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     overflow-x: hidden;
     max-width: 100%;
 }
@@ -168,8 +169,9 @@ body {
 }
 
 .settings-btn {
-   position: fixed;
-    top: 20px;    /* ← statt bottom: 20px */
+    position: fixed;
+    top: 20px;
+    /* ← statt bottom: 20px */
     right: 20px;
     width: 50px;
     height: 50px;
@@ -182,7 +184,10 @@ body {
     z-index: 1000;
     transition: background 0.2s;
 }
-.settings-btn:hover { background-color: #222; }
+
+.settings-btn:hover {
+    background-color: #222;
+}
 
 .settings-panel {
     background: white;
@@ -191,7 +196,7 @@ body {
     margin: auto;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
 .settings-header {
@@ -202,7 +207,12 @@ body {
     background: #c30d0d;
     color: white;
 }
-.settings-header h2 { margin: 0; font-size: 1.4rem; }
+
+.settings-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
 .settings-header button {
     background: none;
     border: none;
@@ -229,23 +239,126 @@ body {
     background: #f5f5f5;
     font-size: 1rem;
 }
-.settings-item.disabled { opacity: 0.4; }
+
+.settings-item.disabled {
+    opacity: 0.4;
+}
 
 /* Toggle Switch */
-.toggle { position: relative; display: inline-block; width: 46px; height: 26px; }
-.toggle input { opacity: 0; width: 0; height: 0; }
-.toggle-slider {
-    position: absolute; inset: 0;
-    background: #ccc; border-radius: 26px;
-    transition: 0.3s; cursor: pointer;
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 26px;
 }
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #ccc;
+    border-radius: 26px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
 .toggle-slider:before {
     content: "";
     position: absolute;
-    width: 20px; height: 20px;
-    left: 3px; bottom: 3px;
-    background: white; border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
     transition: 0.3s;
 }
-.toggle input:checked + .toggle-slider { background: #c30d0d; }
-.toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+.toggle input:checked+.toggle-slider {
+    background: #c30d0d;
+}
+
+.toggle input:checked+.toggle-slider:before {
+    transform: translateX(20px);
+}
+
+.wordFlashOverlay {
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.wordFlashOverlay.hidden {
+    display: none;
+}
+
+.wf-top,
+.wf-bottom {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wf-middle-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    height: 80px;
+}
+
+.wf-left,
+.wf-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.wf-word {
+    font-size: 2.5rem;
+    font-weight: bold;
+    user-select: none;
+}
+
+.wf-top .wf-word {
+    transform: rotate(180deg);
+}
+
+.wf-left .wf-word {
+    transform: rotate(90deg);
+}
+
+.wf-right .wf-word {
+    transform: rotate(-90deg);
+}
+
+.wf-bottom .wf-word {
+    transform: rotate(0deg);
+}
+
+.wf-close-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: #333;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    z-index: 10;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+.wf-close-btn:hover {
+    background: #000;
+}

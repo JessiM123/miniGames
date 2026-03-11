@@ -1,4 +1,16 @@
 const alphabet = "ABCDEFGHIJKLMNOPRSTUWZ".split("");
+
+const wordFlashWords = [
+    "rot", "grün", "gelb", "blau", "schwarz",
+    "pink", "lila", "orange", "braun", "grau",
+    "ich", "bin", "farben", "blind",
+];
+
+const wordFlashColors = [
+    "#fd0c20", "#27911e", "#e7bd51", "#382cdf", "#000000",
+    "#fc15f0", "#9300a7", "#7c7878"
+];
+
 function randomLetter() {
     return alphabet[Math.floor(Math.random() * alphabet.length)];
 }
@@ -430,14 +442,13 @@ class Jukebox extends Game {
         )
     }
 }
-
 class NoiseMaker extends Game {
     constructor() {
         super(
             "What does the fox say?",
             "ressources/noiseMaker.png",
-           `Deine linke Mitspielerin flüstert dir zu, welches Geräusch zu machen sollst (z. B. "Bohrer", "Bauchklatscher", "Elefant").<br>
-           Du darfst dafür nur deine Stimme benutzen, also kein Klatschen, Schnipsen oder ähnliches. <br>
+            `Deine linke Mitspielerin flüstert dir zu, welches Geräusch zu machen sollst (z. B. "Bohrer", "Bauchklatscher", "Elefant").<br>
+            Du darfst dafür nur deine Stimme benutzen, also kein Klatschen, Schnipsen oder ähnliches. <br>
             Du hast <b>2 Versuche</b>.<br><br>
             Wer dein Geräusch <b>zuerst</b> errät, verteilt 1 Klattscher.<br>
             Errät es <b>niemand</b>, musst du klattschen. <br><br>
@@ -446,22 +457,107 @@ class NoiseMaker extends Game {
     }
 }
 
+class WordFlash extends Game {
+    constructor() {
+        super(
+            "Wort-Blitz",
+            "ressources/wordFlash.png",
+            `Bei Spielstart erscheinen laufend Wörter in verschiedenen Farben. Reihum nennt ihr die <b>Farbe</b> des angezeigten Wortes.<br>
+            Aber <b>Achtung</b>: ihr werdet die Wörter "ich", "bin", "farben" und "blind" ebenfalls finden. Bei diesen Wörtern lest ihr das <b>Wort</b> und <b>nicht die Farbe</b>.<br>
+            <b>Sonderregel</b>: Werden die Wörter "ich", "bin", "farben", "blind" zufällig in genau dieser Reihenfolge gezogen - tippt ihr euch an die Nase.<br>
+            Wer einen <b>Fehler</b> macht oder zu <b>langsam</b> antwortet, klattscht. Tritt die Sonderregel ein, klattscht derjenige, der als <b>letztes</b> seine Nase berührt.`
+        );
+    }
+
+    start() {
+        return {
+            name: this.name,
+            img: this.img,
+            description: this.description,
+            onClick: () => wordFlashController.open()
+        };
+    }
+}
+
+class WordFlashController {
+    constructor() {
+        this.overlay = document.getElementById("wordFlashOverlay");
+        this.closeBtn = document.getElementById("wfCloseBtn");
+        this.wordEls = [
+            document.getElementById("wfWordTop"),
+            document.getElementById("wfWordLeft"),
+            document.getElementById("wfWordRight"),
+            document.getElementById("wfWordBottom"),
+        ];
+        this.interval = null;
+
+        this.overlay.addEventListener("click", (e) => {
+            if (e.target === this.closeBtn) return;
+            if (!this.interval) this.startWords();
+        });
+
+        this.closeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            this.close();
+        });
+    }
+
+    open() {
+        this.resetWords();
+        this.overlay.classList.remove("hidden");
+        this.interval = null;
+    }
+
+    startWords() {
+        this.showWord();
+        this.interval = setInterval(() => this.showWord(), 2000);
+    }
+
+    showWord() {
+        const word = wordFlashWords[Math.floor(Math.random() * wordFlashWords.length)];
+        const color = wordFlashColors[Math.floor(Math.random() * wordFlashColors.length)];
+        this.wordEls.forEach(el => {
+            el.textContent = word;
+            el.style.color = color;
+        });
+    }
+
+    resetWords() {
+        this.wordEls.forEach(el => {
+            el.textContent = "";
+            el.style.color = "";
+        });
+        if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+        }
+    }
+
+    close() {
+        this.resetWords();
+        this.overlay.classList.add("hidden");
+    }
+}
+
+const wordFlashController = new WordFlashController();
+
 const games = [
-    new WordRoulette(),
-    new CountAndSound(),
-    new Luftmalerei(),
-    new WordChain(),
-    new CounterStrike(),
-    new WouldYouRather(),
-    new TimeStopper(),
-    new StarredEyes(),
-    new NeverHaveIEver(),
-    new KlattschBattle(),
-    new TouchMeIfYouCan(),
-    new IchSeheWasWasDuNichtSiehst(),
-    new Jukebox(),
+    /* new WordRoulette(),
+     new CountAndSound(),
+     new Luftmalerei(),
+     new WordChain(),
+     new CounterStrike(),
+     new WouldYouRather(),
+     new TimeStopper(),
+     new StarredEyes(),
+     new NeverHaveIEver(),
+     new KlattschBattle(),
+     new TouchMeIfYouCan(),
+     new IchSeheWasWasDuNichtSiehst(),
+     new Jukebox(),*/
     new NoiseMaker(),
-    
+    new WordFlash(),
+
 ]
 
 class GameRenderer {
@@ -496,13 +592,12 @@ class GameManager {
             index = Math.floor(Math.random() * activeGames.length);
             game = activeGames[index];
         } while (activeGames.length > 1 && index === this.lastIndex
-                || (game instanceof TouchMeIfYouCan && game.isRunning()));
+            || (game instanceof TouchMeIfYouCan && game.isRunning()));
         this.lastIndex = index;
         this.renderer.render(game.start());
     }
 }
 
-// Settings
 class SettingsController {
     constructor(games) {
         this.games = games;

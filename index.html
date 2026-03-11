@@ -22,7 +22,7 @@
         <i class="fas fa-redo"></i>
     </button>
 
-        <!-- Nach dem repick-btn einfügen -->
+    <!-- Nach dem repick-btn einfügen -->
     <button class="settings-btn" id="settingsBtn">
         <i class="fas fa-cog"></i>
     </button>
@@ -54,6 +54,24 @@
 
     <div id="touchOverlay" class="overlay hidden fullSize">
         <div id="touchLetter" class="fullSizeContent">
+        </div>
+    </div>
+
+    <div id="wordFlashOverlay" class="overlay hidden wordFlashOverlay">
+        <div class="wf-quadrant wf-top">
+            <span class="wf-word" id="wfWordTop"></span>
+        </div>
+        <div class="wf-middle-row">
+            <div class="wf-quadrant wf-left">
+                <span class="wf-word" id="wfWordLeft"></span>
+            </div>
+            <button class="wf-close-btn" id="wfCloseBtn">✕</button>
+            <div class="wf-quadrant wf-right">
+                <span class="wf-word" id="wfWordRight"></span>
+            </div>
+        </div>
+        <div class="wf-quadrant wf-bottom">
+            <span class="wf-word" id="wfWordBottom"></span>
         </div>
     </div>
     <script src="script.js"></script>
